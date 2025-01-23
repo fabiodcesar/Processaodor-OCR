@@ -1,0 +1,15 @@
+services:
+  app:
+    build: .  # Constrói a imagem usando o Dockerfile no diretório atual
+    command: python3 main.py --input /app/data/input --output /app/data/output
+    volumes:
+      - ./input:/app/data/input      # Monta a pasta local 'input' para /app/input dentro do container
+      - ./output:/app/data/output    # Monta a pasta local 'output' para /app/output dentro do container
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1  # Número de GPUs a serem alocadas
+              capabilities: [gpu]  # Capacidade de GPU
+    runtime: nvidia  # Necessário para suporte a GPU
